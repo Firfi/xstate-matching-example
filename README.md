@@ -1,4 +1,4 @@
-xstate + ts-pattern matching example
+xstate + ts-pattern matching example for https://github.com/statelyai/xstate/discussions/4565
 
 # run
 
