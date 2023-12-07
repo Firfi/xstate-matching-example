@@ -1,0 +1,36 @@
+{
+  "name": "xstate-matching-example",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "xstate-matching-example/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/xstate-matching-example",
+        "main": "xstate-matching-example/src/index.ts",
+        "tsConfig": "xstate-matching-example/tsconfig.lib.json",
+        "assets": ["xstate-matching-example/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "xstate-matching-example/**/*.ts",
+          "xstate-matching-example/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "xstate-matching-example/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
