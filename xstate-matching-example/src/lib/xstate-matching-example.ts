@@ -32,14 +32,14 @@ type UnionType = {
   b: 'b1'
 }
 
-const matcherE1 = (s: typeof snapshot) =>
+export const matcherE1 = (s: typeof snapshot) =>
   match(s.value)
     .with({ a: 'a1' }, () => 'a1!')
     .with({ b: 'b1' }, () => 'b1!')
-    // @ts-expect-error
+    // @ts-expect-error exhaustiveness
     .exhaustive();
 
-const matcherU1 = (s: UnionType) =>
+export const matcherU1 = (s: UnionType) =>
   match(s)
     .with({ a: 'a1' }, () => 'a1!')
     .with({ b: 'b1' }, () => 'b1!')
@@ -54,3 +54,34 @@ const matcherThatWorks = (s: typeof snapshot) =>
     .exhaustive();
 
 export const xstateMatchingExample = (): string => matcherThatWorks(snapshot)
+
+const machineParallel = setup({}).createMachine({
+  type: 'parallel',
+  states: {
+    a: {
+      initial: 'a1',
+      states: {
+        a1: {},
+        a2: {},
+      }
+    },
+    b: {
+      initial: 'b1',
+      states: {
+        b1: {},
+        b2: {},
+      }
+    }
+  }
+});
+
+const snapshotParallel = createActor(machineParallel).getSnapshot();
+
+export const matcherParallel = (s: typeof snapshotParallel) => {
+  match(s.value)
+    .with({ a: 'a1', b: 'b1' }, () => 'a1b1!')
+    .with({ a: 'a2', b: 'b2' }, () => 'a2b2!')
+    .with({ a: 'a1', b: 'b2' }, () => 'a1b2!')
+    .with({ a: 'a2', b: 'b1' }, () => 'a2b1!')
+    .exhaustive();
+}
